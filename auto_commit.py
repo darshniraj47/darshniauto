@@ -82,13 +82,15 @@ def make_commit():
         log(f"⚠️  git commit failed (maybe nothing to commit): {err}")
         return False
 
-    # ── 4. Push to GitHub ──────────────────────────────────────
+    # ── 4. Try to Push to GitHub ───────────────────────────────
+    # If offline, the commit stays locally. The next time they are online, 
+    # Git will push ALL stacked commits and their heatmap will get filled correctly!
     code, out, err = run("git push")
     if code != 0:
-        log(f"❌ git push failed: {err}")
-        return False
+        log(f"📡 Offline Mode: Commit saved locally. Will sync to GitHub when internet is back! (Error: {err})")
+        return True # Return true because commit succeeded locally!
 
-    log(f"✅ Commit pushed → {commit_msg}")
+    log(f"✅ Online Mode: Commit pushed successfully to GitHub → {commit_msg}")
     return True
 
 if __name__ == "__main__":
