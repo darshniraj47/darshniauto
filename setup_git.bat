@@ -12,10 +12,15 @@ echo  │   🔧  Git Repository Setup                   │
 echo  └─────────────────────────────────────────────┘
 echo.
 
-:: ── Ask for GitHub details ───────────────────────────
-set /p GH_USER="Enter your GitHub username: "
-set /p GH_EMAIL="Enter your GitHub email: "
-set /p GH_REPO="Enter your GitHub repo URL (https://github.com/USER/REPO.git): "
+:: ── Pre-filled GitHub details ─────────────────────────
+set GH_USER=darshniraj47
+set GH_EMAIL=darshniraj47@gmail.com
+set GH_REPO=https://github.com/darshniraj47/darshniauto.git
+
+echo  Configuring GitHub settings for %GH_USER%...
+echo  Username : %GH_USER%
+echo  Email    : %GH_EMAIL%
+echo  Repo URL : %GH_REPO%
 
 :: ── Configure git identity ───────────────────────────
 git config user.name  "%GH_USER%"
