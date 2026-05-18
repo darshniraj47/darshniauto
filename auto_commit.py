@@ -9,6 +9,14 @@ import random
 #  Each run = 1 commit to GitHub
 # ─────────────────────────────────────────────
 
+import sys
+
+# Reconfigure stdout/stderr to UTF-8 for safe emoji printing in Windows Console
+if hasattr(sys.stdout, 'reconfigure'):
+    sys.stdout.reconfigure(encoding='utf-8')
+if hasattr(sys.stderr, 'reconfigure'):
+    sys.stderr.reconfigure(encoding='utf-8')
+
 # Get current directory (where this script lives)
 REPO_DIR = os.path.dirname(os.path.abspath(__file__))
 LOG_FILE  = os.path.join(REPO_DIR, "commit_log.txt")
@@ -16,25 +24,25 @@ TICK_FILE = os.path.join(REPO_DIR, "activity", "daily_tick.txt")
 
 # Motivational messages for commit messages
 MESSAGES = [
-    "⚡ Daily progress update",
-    "🚀 Consistency is key",
-    "💡 Another step forward",
-    "🔥 Keeping the streak alive",
-    "📈 Growth mindset activated",
-    "✅ Daily commit done",
-    "🎯 Staying on track",
-    "🌱 Small steps, big results",
-    "💪 No days off",
-    "🏆 Building habits daily",
-    "⚙️  System update",
-    "🌟 Progress over perfection",
+    "Daily progress update",
+    "Consistency is key",
+    "Another step forward",
+    "Keeping the streak alive",
+    "Growth mindset activated",
+    "Daily commit done",
+    "Staying on track",
+    "Small steps, big results",
+    "No days off",
+    "Building habits daily",
+    "System update",
+    "Progress over perfection",
 ]
 
 def run(cmd, cwd=None):
     """Run a shell command and return output."""
     result = subprocess.run(
         cmd, shell=True, cwd=cwd or REPO_DIR,
-        capture_output=True, text=True
+        capture_output=True, text=True, encoding='utf-8', errors='ignore'
     )
     return result.returncode, result.stdout.strip(), result.stderr.strip()
 
@@ -42,7 +50,11 @@ def log(message):
     """Append a message to the log file."""
     now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     entry = f"[{now}] {message}"
-    print(entry)
+    try:
+        print(entry)
+    except UnicodeEncodeError:
+        # Fallback if console still complains
+        print(entry.encode('ascii', 'ignore').decode('ascii'))
     with open(LOG_FILE, "a", encoding="utf-8") as f:
         f.write(entry + "\n")
 
